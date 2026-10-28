@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Search - VulnShop</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="banner">⚠️ Intentionally vulnerable application - for security training only</div>
+  <main class="container">
+    <h1>Product search</h1>
+    <form method="get" class="search">
+      <input type="text" name="q" placeholder="Search products...">
+      <button type="submit">Search</button>
+    </form>
+    {# VULN-03: |safe disables auto-escaping -> reflected XSS #}
+    <p>Results for: {{ query|safe }}</p>
+    <table>
+      <thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Price</th></tr></thead>
+      <tbody>
+      {% for row in results %}
+        <tr><td>{{ row[0] }}</td><td>{{ row[1] }}</td><td>{{ row[2] }}</td><td>{{ row[3] }}</td></tr>
+      {% else %}
+        <tr><td colspan="4">No results</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <p><a href="{{ url_for('index') }}">← Home</a></p>
+  </main>
+</body>
+</html>
